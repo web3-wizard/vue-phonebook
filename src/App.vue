@@ -2,9 +2,17 @@
   <NavBar :totalContact="totalContact" />
   <h1 class="my-2 text-primary">Phonebook</h1>
 
-  <AddContact @addNewContact="saveContact" />
+  <div class="container">
+    <div class="row mx-auto">
+      <div class="col-4">
+        <AddContact @addNewContact="saveContact" />
+      </div>
 
-  <ViewContact :contacts="contacts" @removeContact="deleteContact" />
+      <div class="col-8">
+        <ViewContact :contacts="contacts" @removeContact="deleteContact" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>

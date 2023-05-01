@@ -1,11 +1,11 @@
 <template>
   <div
-    class="container border border-2 border-secondary border-opacity-50 p-2 rounded-2 mb-4"
+    class="container border border-2 border-secondary border-opacity-50 p-2 rounded-2 mb-4 px-3"
   >
     <h2 class="my-2">Add New Contact</h2>
     <form @submit.prevent="addContact" class="my-1">
       <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
+        <label for="name" class="form-label float-start">Name</label>
         <input
           type="text"
           class="form-control"
@@ -16,7 +16,9 @@
         />
       </div>
       <div class="mb-3">
-        <label for="phoneNumber" class="form-label">Phone Number</label>
+        <label for="phoneNumber" class="form-label float-start"
+          >Phone Number</label
+        >
         <input
           type="number"
           class="form-control"

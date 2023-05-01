@@ -1,3 +1,4 @@
+span
 <template>
   <div
     class="container p-3 border border-2 border-secondary border-opacity-50 rounded-2"
@@ -18,21 +19,23 @@
       <span v-if="searchTerm">Search Result</span>
       <span v-if="!searchTerm">All Contacts</span>
     </h2>
-    <div
-      class="container border border-1 border-secondary border-opacity-25 rounded-3 px-5 py-2 d-flex justify-content-between align-items-center mb-3"
-      v-for="contact in filteredContacts"
-      :key="contact.phone"
-    >
-      <span>{{ contact.name }}</span>
-      <span
-        >{{ contact.phone }}
-        <span>
-          <i
-            class="fa fa-trash ms-3 text-danger deleteButton"
-            @click="() => handlePress(contact.phone)"
-          >
-          </i> </span
-      ></span>
+    <div class="scrollViewDiv">
+      <div
+        class="container border border-1 border-secondary border-opacity-25 rounded-3 px-5 py-2 d-flex justify-content-between align-items-center mb-3"
+        v-for="contact in filteredContacts"
+        :key="contact.phone"
+      >
+        <span>{{ contact.name }}</span>
+        <span
+          >{{ contact.phone }}
+          <span>
+            <i
+              class="fa fa-trash ms-3 text-danger deleteButton"
+              @click="() => handlePress(contact.phone)"
+            >
+            </i> </span
+        ></span>
+      </div>
     </div>
   </div>
 </template>
@@ -53,8 +56,9 @@ export default {
   },
   methods: {
     handlePress(phone) {
-      console.log(phone);
-      this.$emit("removeContact", phone);
+      if (confirm("Are you sure you want to delete this phone?")) {
+        this.$emit("removeContact", phone);
+      }
     },
     handleSearch() {
       this.$emit("searchContact", this.searchTerm);
@@ -82,5 +86,9 @@ export default {
 }
 .inputSearch {
   outline: none;
+}
+.scrollViewDiv {
+  max-height: 400px;
+  overflow-y: auto;
 }
 </style>
