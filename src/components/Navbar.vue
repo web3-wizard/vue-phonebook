@@ -6,7 +6,8 @@
         <span class="ms-2">Phone Book</span>
       </a>
       <span class="text-light text-opacity-75">
-        Total Contact: {{ totalContact }}
+        <i class="fa fa-address-card fa-lg"></i>
+        <strong class="ms-2">{{ totalContact }}</strong>
       </span>
     </div>
   </nav>

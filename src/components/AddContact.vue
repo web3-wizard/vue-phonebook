@@ -1,15 +1,16 @@
 <template>
   <div
-    class="container border border-2 border-secondary border-opacity-50 p-2 rounded-2"
+    class="container border border-2 border-secondary border-opacity-50 p-2 rounded-2 mb-4"
   >
-    <h2>Add New Contact</h2>
-    <form @submit.prevent="addContact">
+    <h2 class="my-2">Add New Contact</h2>
+    <form @submit.prevent="addContact" class="my-1">
       <div class="mb-3">
         <label for="name" class="form-label">Name</label>
         <input
           type="text"
           class="form-control"
           id="name"
+          placeholder="Enter name"
           required
           v-model.trim="name"
         />
@@ -21,13 +22,14 @@
           class="form-control"
           id="phoneNumber"
           pattern="^\d{10}$"
+          placeholder="Enter phone number"
           required
           v-model.trim="phone"
         />
       </div>
       <p v-if="error">{{ error }}</p>
-      <button type="submit" class="btn btn-primary" :disabled="!valid">
-        <span class="mx-2">Save</span>
+      <button type="submit" class="btn btn-success" :disabled="!valid">
+        <span class="mx-2"> Save</span>
       </button>
     </form>
   </div>
@@ -50,13 +52,12 @@ export default {
   },
   methods: {
     addContact() {
-      const result = {
+      const contact = {
         name: this.name,
         phone: this.phone,
       };
       if (this.valid) {
-        console.log(result);
-        this.$emit("addNewContact", result);
+        this.$emit("addNewContact", contact);
         this.name = "";
         this.phone = "";
       } else {
