@@ -23,7 +23,7 @@ span
       <div
         class="container border border-1 border-secondary border-opacity-25 rounded-3 px-5 py-2 d-flex justify-content-between align-items-center mb-3"
         v-for="contact in filteredContacts"
-        :key="contact.phone"
+        :key="contact.id"
       >
         <span>{{ contact.name }}</span>
         <span
@@ -31,7 +31,7 @@ span
           <span>
             <i
               class="fa fa-trash ms-3 text-danger deleteButton"
-              @click="() => handlePress(contact.phone)"
+              @click="() => handlePress(contact.id)"
             >
             </i> </span
         ></span>
@@ -41,38 +41,35 @@ span
 </template>
 
 <script>
+import { computed, ref } from "vue";
+import { usePhonebookStore } from "@/stores/phonebook";
+
 export default {
   name: "ViewContact",
-  props: {
-    contacts: {
-      type: Array,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      searchTerm: "",
-    };
-  },
-  methods: {
-    handlePress(phone) {
+  setup() {
+    const searchTerm = ref("");
+    const store = ref(usePhonebookStore());
+
+    function handlePress(id) {
       if (confirm("Are you sure you want to delete this phone?")) {
-        this.$emit("removeContact", phone);
+        store.value.delete(id);
       }
-    },
-    handleSearch() {
-      this.$emit("searchContact", this.searchTerm);
-    },
-  },
-  computed: {
-    filteredContacts() {
-      return this.contacts.filter((contact) => {
+    }
+
+    const filteredContacts = computed(() => {
+      return store.value.contactByName.filter((contact) => {
         return (
-          contact.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-          contact.phone.toString().includes(this.searchTerm)
+          contact.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+          contact.phone.toString().includes(searchTerm.value)
         );
       });
-    },
+    });
+
+    return {
+      searchTerm,
+      handlePress,
+      filteredContacts,
+    };
   },
 };
 </script>

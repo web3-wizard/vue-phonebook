@@ -38,35 +38,46 @@
 </template>
 
 <script>
+import { ref, reactive, toRefs, computed } from "vue";
+import { usePhonebookStore } from "@/stores/phonebook";
+
 export default {
   name: "AddContact",
-  data() {
-    return {
+  setup() {
+    const store = ref(usePhonebookStore());
+    const state = reactive({
       name: "",
       phone: "",
       error: "",
+    });
+
+    const valid = computed(() => {
+      return /^\d{10}$/.test(state.phone);
+    });
+
+    function addContact() {
+      const contact = {
+        name: state.name,
+        phone: state.phone,
+      };
+      if (valid.value) {
+        store.value.create(contact);
+        state.name = "";
+        state.phone = "";
+      } else {
+        state.error = "Please enter exactly 10 digits";
+      }
+    }
+
+    return {
+      store,
+      ...toRefs(state),
+      valid,
+      addContact,
     };
   },
-  computed: {
-    valid() {
-      return /^\d{10}$/.test(this.phone);
-    },
-  },
-  methods: {
-    addContact() {
-      const contact = {
-        name: this.name,
-        phone: this.phone,
-      };
-      if (this.valid) {
-        this.$emit("addNewContact", contact);
-        this.name = "";
-        this.phone = "";
-      } else {
-        this.error = "Please enter exactly 10 digits";
-      }
-    },
-  },
+
+  methods: {},
 };
 </script>
 
