@@ -1,4 +1,36 @@
 <template>
+  <div class="my-3" v-if="status">
+    <div
+      class="alert alert-success alert-dismissible fade show"
+      role="alert"
+      v-if="status === 'success'"
+    >
+      <strong>{{ msg }}</strong>
+      <span class="mx-1">
+        Go to
+        <router-link class="text-decoration-none" to="/">home</router-link>.
+      </span>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div
+      class="alert alert-danger alert-dismissible fade show"
+      role="alert"
+      v-if="status === 'error'"
+    >
+      <strong>{{ msg }}</strong>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
   <div
     class="container border border-2 border-secondary border-opacity-50 p-2 rounded-2 mb-4 px-3"
   >
@@ -29,7 +61,6 @@
           v-model.trim="phone"
         />
       </div>
-      <p v-if="error">{{ error }}</p>
       <button type="submit" class="btn btn-success" :disabled="!valid">
         <span class="mx-2"> Save</span>
       </button>
@@ -48,7 +79,8 @@ export default {
     const state = reactive({
       name: "",
       phone: "",
-      error: "",
+      msg: "",
+      status: "",
     });
 
     const valid = computed(() => {
@@ -61,11 +93,14 @@ export default {
         phone: state.phone,
       };
       if (valid.value) {
-        store.value.create(contact);
+        const response = store.value.create(contact);
+        state.status = response.status;
+        state.msg = response.msg;
         state.name = "";
         state.phone = "";
       } else {
-        state.error = "Please enter exactly 10 digits";
+        state.status = "error";
+        state.msg = "Please enter exactly 10 digits";
       }
     }
 

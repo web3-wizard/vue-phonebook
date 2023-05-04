@@ -23,17 +23,25 @@ export const usePhonebookStore = defineStore("phonebook", {
     create(contact) {
       const result = this.contacts.find((item) => item.phone === contact.phone);
       if (result !== undefined) {
-        alert("Phone Number already in phonebook!");
-        return;
+        return {
+          status: "error",
+          msg: "Phone Number already in phonebook!",
+        };
       } else {
         this.contacts.push({ id: uuid(), ...contact });
-        alert("Contact save successfully!");
+        return {
+          status: "success",
+          msg: "Contact save successfully!",
+        };
       }
     },
     // delete a contact by its id
     delete(id) {
       this.contacts = this.contacts.filter((contact) => contact.id !== id);
-      alert(`Contact of id : ${id} deleted successfully!`);
+      return {
+        status: "success",
+        msg: `Contact of id : ${id} deleted successfully!`,
+      };
     },
   },
   getters: {

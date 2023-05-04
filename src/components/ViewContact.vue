@@ -1,5 +1,32 @@
-span
 <template>
+  <div class="my-3" v-if="status">
+    <div
+      class="alert alert-success alert-dismissible fade show"
+      role="alert"
+      v-if="status === 'success'"
+    >
+      <strong>{{ msg }}</strong>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div
+      class="alert alert-danger alert-dismissible fade show"
+      role="alert"
+      v-if="status === 'error'"
+    >
+      <strong>{{ msg }}</strong>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
   <div
     class="container p-3 border border-2 border-secondary border-opacity-50 rounded-2"
   >
@@ -41,7 +68,7 @@ span
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed, ref, reactive, toRefs } from "vue";
 import { usePhonebookStore } from "@/stores/phonebook";
 
 export default {
@@ -50,9 +77,16 @@ export default {
     const searchTerm = ref("");
     const store = ref(usePhonebookStore());
 
+    const state = reactive({
+      status: "",
+      msg: "",
+    });
+
     function handlePress(id) {
       if (confirm("Are you sure you want to delete this phone?")) {
-        store.value.delete(id);
+        const response = store.value.delete(id);
+        state.status = response.status;
+        state.msg = response.msg;
       }
     }
 
@@ -69,6 +103,7 @@ export default {
       searchTerm,
       handlePress,
       filteredContacts,
+      ...toRefs(state),
     };
   },
 };
